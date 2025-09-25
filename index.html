@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complete Educational Platform with Admin Panel and Firebase Integration</title>
+    <script src="/protection.js"></script>
+    <style>
+      * {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+        -webkit-touch-callout: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+      
+      input, textarea {
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        -ms-user-select: text !important;
+        user-select: text !important;
+      }
+      
+      body {
+        -webkit-user-drag: none !important;
+        -khtml-user-drag: none !important;
+        -moz-user-drag: none !important;
+        -o-user-drag: none !important;
+        user-drag: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Additional immediate protection
+      document.addEventListener('DOMContentLoaded', function() {
+        // Hide source in view-source
+        if (window.location.protocol === 'view-source:') {
+          window.location.href = 'about:blank';
+        }
+        
+        // Prevent iframe embedding
+        if (window.top !== window.self) {
+          window.top.location = window.self.location;
+        }
+        
+        // Clear any debugging attempts
+        setInterval(function() {
+          if (window.console && window.console.clear) {
+            window.console.clear();
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
