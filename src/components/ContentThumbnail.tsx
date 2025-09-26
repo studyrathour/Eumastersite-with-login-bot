@@ -99,10 +99,10 @@ const ContentThumbnail: React.FC<ContentThumbnailProps> = ({
   return (
     <>
       <div 
-        className="group cursor-pointer border-2 border-gray-400 rounded-xl p-4 hover:border-primary transition-all duration-300 hover:shadow-xl bg-gray-600" 
+        className="group cursor-pointer border-2 border-gray-400 dark:border-gray-400 rounded-xl p-2 hover:border-primary transition-all duration-300 hover:shadow-xl bg-gray-200 dark:bg-gray-600" 
         onClick={handleClick}
       >
-        <div className="relative w-full bg-gray-500 rounded-lg overflow-hidden border-2 border-gray-400 group-hover:border-primary/70 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20">
+        <div className="relative w-full bg-gray-300 dark:bg-gray-500 rounded-lg overflow-hidden border-2 border-gray-400 dark:border-gray-400 group-hover:border-primary/70 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20">
           <img
             src={imageUrl}
             alt={displayTitle}
@@ -114,10 +114,10 @@ const ContentThumbnail: React.FC<ContentThumbnailProps> = ({
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
 
-          <div className="absolute top-0 left-0 h-full w-[70%] flex items-center justify-center p-4">
+          <div className="absolute top-0 left-0 h-full w-[75%] flex items-center justify-center p-2">
             <h4 
               ref={titleRef}
-              className="text-white font-bold text-center text-base md:text-lg lg:text-xl leading-tight break-words" 
+              className="text-white font-bold text-center text-sm md:text-base lg:text-lg leading-tight break-words" 
               style={{ textShadow: '2px 2px 8px rgba(0, 0, 0, 0.95)' }}
               title={displayTitle}
             >
@@ -134,16 +134,9 @@ const ContentThumbnail: React.FC<ContentThumbnailProps> = ({
           )}
         </div>
 
-        <div className="mt-4 space-y-3 bg-gray-600 p-3 rounded-lg">
-          <h4 
-            ref={subTitleRef} 
-            className="font-semibold text-white text-base line-clamp-2 group-hover:text-blue-300 transition-colors break-words"
-            title={displayTitle}
-          >
-            {displayTitle}
-          </h4>
+        <div className="mt-2 bg-gray-200 dark:bg-gray-600 p-2 rounded-lg">
           {!isSubject && (
-            <div className="w-full bg-gray-700 text-blue-300 py-2 px-3 rounded text-xs font-medium hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center gap-1 border border-gray-500">
+            <div className="w-full bg-gray-300 dark:bg-gray-700 text-blue-600 dark:text-blue-300 py-1.5 px-2 rounded text-xs font-medium hover:bg-primary hover:text-white transition-all duration-200 flex items-center justify-center gap-1 border border-gray-400 dark:border-gray-500">
               {getIcon(contentType)}
               <span>{getButtonText(contentType)}</span>
             </div>
@@ -177,17 +170,6 @@ const ContentThumbnail: React.FC<ContentThumbnailProps> = ({
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             />
           </div>
-          
-          {/* Click outside to close */}
-          <div 
-            className="absolute inset-0 z-30"
-            onClick={(e) => {
-              // Only close if clicking outside the video area (on the black background)
-              if (e.target === e.currentTarget) {
-                setShowVideoModal(false);
-              }
-            }}
-          />
         </div>
       )}
     </>

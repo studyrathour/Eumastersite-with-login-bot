@@ -9,14 +9,14 @@ const LiveClassPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Seamless Embedded Live Class Platform */}
       <div className="flex-1 relative">
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background z-10">
+          <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-10">
             <div className="text-center">
               <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-text-secondary">Loading live classes...</p>
+              <p className="text-gray-700 dark:text-gray-300">Loading live classes...</p>
             </div>
           </div>
         )}

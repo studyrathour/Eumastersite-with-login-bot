@@ -2,9 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme Variables */
+:root {
+  --color-background: 255 255 255; /* Light theme */
+  --color-surface: 248 249 250;
+  --color-primary: 59 130 246;
+  --color-secondary: 229 231 235;
+  --color-text-primary: 17 24 39;
+  --color-text-secondary: 75 85 99;
+  --color-text-tertiary: 156 163 175;
+}
+
+.dark {
+  --color-background: 17 24 39; /* Dark theme */
+  --color-surface: 30 41 59;
+  --color-primary: 59 130 246;
+  --color-secondary: 51 65 85;
+  --color-text-primary: 248 250 252;
+  --color-text-secondary: 203 213 225;
+  --color-text-tertiary: 148 163 184;
+}
+
+/* Apply theme colors */
+.theme-bg {
+  background-color: rgb(var(--color-background));
+}
+
+.theme-surface {
+  background-color: rgb(var(--color-surface));
+}
+
+.theme-text {
+  color: rgb(var(--color-text-primary));
+}
+
+.theme-text-secondary {
+  color: rgb(var(--color-text-secondary));
+}
+
 @layer base {
   body {
-    @apply bg-background text-text-primary antialiased;
+    @apply antialiased;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-text-primary));
     -webkit-user-select: none !important;
     -moz-user-select: none !important;
     -ms-user-select: none !important;

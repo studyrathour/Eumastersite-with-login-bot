@@ -55,7 +55,7 @@ const ContentExplorer: React.FC<ContentExplorerProps> = ({ batch, onBackToCourse
 
   const renderBreadcrumb = () => {
     return (
-      <div className="flex items-center gap-2 text-xs text-text-secondary mb-3">
+      <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 mb-3">
         <button 
           onClick={onBackToCourses}
           className="hover:text-primary transition-colors"
@@ -118,7 +118,7 @@ const ContentExplorer: React.FC<ContentExplorerProps> = ({ batch, onBackToCourse
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
           </button>
-          <h1 className="text-lg font-bold text-text-primary">{currentLevel.title}</h1>
+          <h1 className="text-lg font-bold text-gray-900 dark:text-white">{currentLevel.title}</h1>
         </div>
         {renderBreadcrumb()}
       </div>

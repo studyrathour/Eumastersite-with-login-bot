@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { ThemeProvider } from './context/ThemeContext';
 import Navigation from './components/Navigation';
 import HomePage from './components/HomePage';
 import BatchesPage from './components/BatchesPage';
@@ -17,21 +18,22 @@ const App: React.FC = () => {
   const forceUpdate = () => setAuthKey(prev => prev + 1);
 
   return (
-    <Router>
-      <div className="App" key={authKey}>
-        {/* Global Navigation */}
-        <Navigation />
-        
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: '#363636',
-              color: '#fff',
-            },
-          }}
-        />
+    <ThemeProvider>
+      <Router>
+        <div className="App" key={authKey}>
+          {/* Global Navigation */}
+          <Navigation />
+          
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+            }}
+          />
         <Routes>
           {/* Home page is the default route */}
           <Route path="/" element={<HomePage />} />
@@ -64,6 +66,7 @@ const App: React.FC = () => {
         </Routes>
       </div>
     </Router>
+    </ThemeProvider>
   );
 };
 

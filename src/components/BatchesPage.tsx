@@ -3,7 +3,7 @@ import StudentInterface from './StudentInterface';
 
 const BatchesPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Student Interface Content */}
       <div className="flex-1">
         <StudentInterface />

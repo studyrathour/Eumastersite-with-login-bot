@@ -42,13 +42,13 @@ const StudentInterface: React.FC = () => {
   const renderMainContent = () => {
     if (error) {
       return (
-        <div className="bg-danger/10 border border-danger/30 text-text-primary px-6 py-4 rounded-lg" role="alert">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-gray-900 dark:text-gray-100 px-6 py-4 rounded-lg" role="alert">
           <div className="flex items-center">
-            <AlertTriangle className="w-8 h-8 mr-4 text-danger" />
+            <AlertTriangle className="w-8 h-8 mr-4 text-red-600 dark:text-red-400" />
             <div>
               <h3 className="font-bold text-xl mb-2">Connection Error</h3>
-              <p className="text-text-secondary">{error}</p>
-              <p className="text-sm text-text-tertiary mt-2">This is often due to an incomplete Firebase setup (e.g., Firestore database not created) or incorrect security rules.</p>
+              <p className="text-gray-700 dark:text-gray-300">{error}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">This is often due to an incomplete Firebase setup (e.g., Firestore database not created) or incorrect security rules.</p>
             </div>
           </div>
         </div>
@@ -73,10 +73,10 @@ const StudentInterface: React.FC = () => {
     return (
       <div>
         {allBatches.length === 0 && !isLoading ? (
-          <div className="text-center py-12 bg-surface rounded-lg shadow-lg border border-secondary">
-            <Book className="w-16 h-16 text-text-tertiary mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-text-secondary">No Courses Available</h3>
-            <p className="text-text-tertiary mt-2">Content is being prepared. Please check back later.</p>
+          <div className="text-center py-12 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg border border-gray-300 dark:border-gray-600">
+            <Book className="w-16 h-16 text-gray-500 dark:text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300">No Courses Available</h3>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">Content is being prepared. Please check back later.</p>
           </div>
         ) : (
           <div className="space-y-16">
@@ -106,7 +106,7 @@ const StudentInterface: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <main className={`${
         selectedBatch 
           ? 'h-screen flex flex-col' 
