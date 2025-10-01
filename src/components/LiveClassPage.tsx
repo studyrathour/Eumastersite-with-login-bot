@@ -91,17 +91,15 @@ const LiveClassPage: React.FC = () => {
               Join your scheduled classes in real-time
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-              Current Time (IST): {currentTime.toLocaleTimeString('en-IN', {
+              Current Time: {currentTime.toLocaleTimeString('en-IN', {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: true,
-                timeZone: 'Asia/Kolkata'
+                hour12: true
               })} • {currentTime.toLocaleDateString('en-IN', {
                 day: 'numeric',
                 month: 'short',
-                year: 'numeric',
-                timeZone: 'Asia/Kolkata'
+                year: 'numeric'
               })}
             </p>
           </div>
@@ -285,7 +283,7 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, onJoin, isUpcoming, is
     if (!isUpcoming) return;
 
     const updateCountdown = () => {
-      const now = new Date().getTime();
+      const now = Date.now();
       const start = new Date(classItem.startTime).getTime();
       const diff = start - now;
 
@@ -315,21 +313,23 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, onJoin, isUpcoming, is
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('en-IN', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-      timeZone: 'Asia/Kolkata'
-    });
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    const displayMinutes = minutes.toString().padStart(2, '0');
+
+    return `${displayHours.toString().padStart(2, '0')}:${displayMinutes} ${period}`;
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-IN', {
+    return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
-      timeZone: 'Asia/Kolkata'
+      timeZone: 'UTC'
     });
   };
 
