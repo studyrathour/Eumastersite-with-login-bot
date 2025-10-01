@@ -13,6 +13,7 @@ const LiveClassPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const fetchClasses = async (status: TabType) => {
     setLoading(true);
@@ -58,6 +59,13 @@ const LiveClassPage: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const handleClassClick = (videoUrl: string) => {
     const playerUrl = `https://edumastervideoplarerwatch.netlify.app/live/${encodeURIComponent(videoUrl)}`;
     window.open(playerUrl, '_blank');
@@ -81,6 +89,20 @@ const LiveClassPage: React.FC = () => {
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
               Join your scheduled classes in real-time
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+              Current Time (IST): {currentTime.toLocaleTimeString('en-IN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Kolkata'
+              })} • {currentTime.toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                timeZone: 'Asia/Kolkata'
+              })}
             </p>
           </div>
 
@@ -293,19 +315,21 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, onJoin, isUpcoming, is
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', {
+    return date.toLocaleTimeString('en-IN', {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true
+      hour12: true,
+      timeZone: 'Asia/Kolkata'
     });
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('en-IN', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
+      timeZone: 'Asia/Kolkata'
     });
   };
 
@@ -345,7 +369,7 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, onJoin, isUpcoming, is
         <div className="space-y-2 mb-4">
           <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <Users className="w-4 h-4" />
-            <span>{classItem.tutor.name}</span>
+            <span className="truncate">{classItem.tutor.name}</span>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
