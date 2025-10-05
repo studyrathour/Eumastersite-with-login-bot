@@ -58,12 +58,8 @@ export const clearUserToken = (): void => {
 
 // Determine base URL based on environment
 const getApiBaseUrl = () => {
-  // In development, use the proxy
-  if (import.meta.env.DEV) {
-    return '/api';
-  }
-  // In production, use the direct API URL
-  return 'https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app';
+  // Use Netlify functions for API calls
+  return '/.netlify/functions';
 };
 
 export const verifyToken = async (token: string): Promise<TokenVerificationResponse> => {
@@ -71,16 +67,23 @@ export const verifyToken = async (token: string): Promise<TokenVerificationRespo
     // Log the exact token being sent for debugging
     console.log('Sending token for verification:', token);
     
-    // Use appropriate base URL based on environment
+    // Use Netlify function for token verification
     const baseUrl = getApiBaseUrl();
     const encodedToken = encodeURIComponent(token);
     const url = `${baseUrl}/verify-token?token=${encodedToken}`;
     console.log('Making request to:', url);
     
+    // Add better error handling for network issues
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+    
     const response = await fetch(url, {
       method: 'GET',
-      cache: 'no-cache'
+      cache: 'no-cache',
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     console.log('Response status:', response.status);
     
@@ -106,6 +109,15 @@ export const verifyToken = async (token: string): Promise<TokenVerificationRespo
     return data;
   } catch (error: unknown) {
     console.error('Token verification error:', error);
+    
+    // Handle timeout specifically
+    if (error instanceof Error && error.name === 'AbortError') {
+      return {
+        valid: false,
+        message: 'Request timeout. Please check your internet connection and try again.',
+      };
+    }
+    
     // More specific error messages based on error type
     if (error instanceof TypeError) {
       return {
@@ -128,15 +140,22 @@ export const verifyToken = async (token: string): Promise<TokenVerificationRespo
 
 export const checkAccess = async (userId: number): Promise<AccessCheckResponse> => {
   try {
-    // Use appropriate base URL based on environment
+    // Use Netlify function for access check
     const baseUrl = getApiBaseUrl();
     const url = `${baseUrl}/check-access?userId=${encodeURIComponent(userId.toString())}`;
     console.log('Making request to:', url);
     
+    // Add better error handling for network issues
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+    
     const response = await fetch(url, {
       method: 'GET',
-      cache: 'no-cache'
+      cache: 'no-cache',
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     console.log('Response status:', response.status);
     
@@ -162,6 +181,16 @@ export const checkAccess = async (userId: number): Promise<AccessCheckResponse> 
     return data;
   } catch (error: unknown) {
     console.error('Access check error:', error);
+    
+    // Handle timeout specifically
+    if (error instanceof Error && error.name === 'AbortError') {
+      return {
+        hasAccess: false,
+        message: 'Request timeout. Please check your internet connection and try again.',
+        expiresAt: null
+      };
+    }
+    
     // More specific error messages based on error type
     if (error instanceof TypeError) {
       return {

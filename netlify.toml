@@ -5,24 +5,14 @@
   command = "npm install && npm run build"
   # The directory that contains the built site.
   publish = "dist"
+  
+  # The directory that contains Netlify functions
+  functions = "netlify/functions"
 
 [build.environment]
   # This is the crucial line that fixes the build error.
   # It forces Netlify to use Node.js version 20.
   NODE_VERSION = "20"
-
-# Proxy API requests to the Telegram bot
-[[redirects]]
-  from = "/api/verify-token"
-  to = "https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app/verify-token"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/check-access"
-  to = "https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app/check-access"
-  status = 200
-  force = true
 
 # This rule is essential for Single Page Applications (SPAs) like yours.
 # It ensures that all paths are handled by your index.html file,
@@ -31,3 +21,9 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Headers for API proxy requests
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
