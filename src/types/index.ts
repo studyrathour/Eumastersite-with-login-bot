@@ -71,3 +71,31 @@ export interface LiveClass {
   isLive: boolean;
   createdAt: Date;
 }
+
+// Updated interfaces for API responses
+export interface APILiveClass {
+  id: string;
+  recurring_class_id: string;
+  title: string;
+  batch: string;
+  batchId: string;
+  startTime: string; // ISO string
+  endTime: string; // ISO string
+  thumbnailUrl: string;
+  tutor: {
+    id: string;
+    name: string;
+    video_url: string;
+    avatar_url: string | null;
+    created_at: string; // ISO string
+  };
+}
+
+export interface APINotification {
+  id: string;
+  title: string;
+  message: string;
+  timestamp: string; // ISO string
+  isRead: boolean;
+  type: 'info' | 'warning' | 'error' | 'success';
+}
