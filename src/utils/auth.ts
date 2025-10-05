@@ -58,8 +58,8 @@ export const clearUserToken = (): void => {
 
 // Determine base URL based on environment
 const getApiBaseUrl = () => {
-  // Use Netlify functions for API calls
-  return '/.netlify/functions';
+  // Use direct API URL with proper CORS handling
+  return 'https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app';
 };
 
 export const verifyToken = async (token: string): Promise<TokenVerificationResponse> => {
@@ -67,7 +67,7 @@ export const verifyToken = async (token: string): Promise<TokenVerificationRespo
     // Log the exact token being sent for debugging
     console.log('Sending token for verification:', token);
     
-    // Use Netlify function for token verification
+    // Use direct API URL
     const baseUrl = getApiBaseUrl();
     const encodedToken = encodeURIComponent(token);
     const url = `${baseUrl}/verify-token?token=${encodedToken}`;
@@ -80,7 +80,10 @@ export const verifyToken = async (token: string): Promise<TokenVerificationRespo
     const response = await fetch(url, {
       method: 'GET',
       cache: 'no-cache',
-      signal: controller.signal
+      signal: controller.signal,
+      // Add credentials and mode for better CORS handling
+      credentials: 'omit',
+      mode: 'cors'
     });
     
     clearTimeout(timeoutId);
@@ -140,7 +143,7 @@ export const verifyToken = async (token: string): Promise<TokenVerificationRespo
 
 export const checkAccess = async (userId: number): Promise<AccessCheckResponse> => {
   try {
-    // Use Netlify function for access check
+    // Use direct API URL
     const baseUrl = getApiBaseUrl();
     const url = `${baseUrl}/check-access?userId=${encodeURIComponent(userId.toString())}`;
     console.log('Making request to:', url);
@@ -152,7 +155,10 @@ export const checkAccess = async (userId: number): Promise<AccessCheckResponse> 
     const response = await fetch(url, {
       method: 'GET',
       cache: 'no-cache',
-      signal: controller.signal
+      signal: controller.signal,
+      // Add credentials and mode for better CORS handling
+      credentials: 'omit',
+      mode: 'cors'
     });
     
     clearTimeout(timeoutId);

@@ -5,9 +5,6 @@
   command = "npm install && npm run build"
   # The directory that contains the built site.
   publish = "dist"
-  
-  # The directory that contains Netlify functions
-  functions = "netlify/functions"
 
 [build.environment]
   # This is the crucial line that fixes the build error.
@@ -22,8 +19,8 @@
   to = "/index.html"
   status = 200
 
-# Headers for API proxy requests
+# Add CORS headers for API calls
 [[headers]]
-  for = "/api/*"
+  for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
