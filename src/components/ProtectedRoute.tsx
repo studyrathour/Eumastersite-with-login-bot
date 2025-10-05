@@ -1,11 +1,36 @@
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { isAdminAuthenticated } from '../utils/auth';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { isAdminAuthenticated, isUserAuthenticated } from '../utils/auth';
 
 const ProtectedRoute: React.FC = () => {
-  // If the user is authenticated, render the nested routes (the admin dashboard).
-  // Otherwise, redirect them to the login page.
-  return isAdminAuthenticated() ? <Outlet /> : <Navigate to="/surajadminedumasterlogin" replace />;
+  const location = useLocation();
+  
+  // Check if user is admin
+  const isAdmin = isAdminAuthenticated();
+  
+  // Check if user has valid token
+  const isUser = isUserAuthenticated();
+  
+  // Allow access to token verification page for unauthenticated users
+  const isTokenPage = location.pathname === '/verify-token';
+  
+  // If user is admin, allow access to admin routes
+  if (isAdmin) {
+    return <Outlet />;
+  }
+  
+  // If user has valid token, allow access to content
+  if (isUser) {
+    return <Outlet />;
+  }
+  
+  // If user is on token page, allow access
+  if (isTokenPage) {
+    return <Outlet />;
+  }
+  
+  // Redirect unauthenticated users to token verification page
+  return <Navigate to="/verify-token" replace />;
 };
 
 export default ProtectedRoute;

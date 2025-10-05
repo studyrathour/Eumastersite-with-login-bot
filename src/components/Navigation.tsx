@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Home, Video, Users, Sun, Moon } from 'lucide-react';
+import { BookOpen, Home, Video, Users, Sun, Moon, Shield } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { isUserAuthenticated, isAdminAuthenticated } from '../utils/auth';
 
 const Navigation: React.FC = () => {
   const location = useLocation();
@@ -15,6 +16,9 @@ const Navigation: React.FC = () => {
   const isActive = (path: string) => {
     return location.pathname === path;
   };
+
+  // Check authentication status
+  const isAuthenticated = isUserAuthenticated() || isAdminAuthenticated();
 
   return (
     <nav className="bg-gray-200 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700 sticky top-0 z-50">
@@ -66,6 +70,17 @@ const Navigation: React.FC = () => {
                 <Video className="w-4 h-4" />
                 Live Classes
               </Link>
+              
+              {/* Show Get Access button for unauthenticated users */}
+              {!isAuthenticated && (
+                <Link 
+                  to="/verify-token" 
+                  className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium bg-green-600 text-white hover:bg-green-700 transition-colors"
+                >
+                  <Shield className="w-4 h-4" />
+                  Get Access
+                </Link>
+              )}
             </div>
           </div>
 
@@ -110,6 +125,16 @@ const Navigation: React.FC = () => {
               >
                 <Video className="w-5 h-5" />
               </Link>
+              
+              {/* Show Get Access button for unauthenticated users on mobile */}
+              {!isAuthenticated && (
+                <Link 
+                  to="/verify-token" 
+                  className="p-2 rounded-md bg-green-600 text-white hover:bg-green-700"
+                >
+                  <Shield className="w-5 h-5" />
+                </Link>
+              )}
             </div>
           </div>
         </div>

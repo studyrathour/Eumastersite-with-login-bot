@@ -25,4 +25,18 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
+  server: {
+    proxy: {
+      '/api/verify-token': {
+        target: 'https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/api/check-access': {
+        target: 'https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      }
+    }
+  }
 });

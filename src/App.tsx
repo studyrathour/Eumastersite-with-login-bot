@@ -11,6 +11,8 @@ import AdminDashboard from './components/AdminDashboard';
 import EmbedWidget from './components/EmbedWidget';
 import VideoPlayerDemo from './components/VideoPlayerDemo';
 import ProtectedRoute from './components/ProtectedRoute';
+import TokenVerificationPage from './components/TokenVerificationPage';
+import AccessTimer from './components/AccessTimer';
 import { isAdminAuthenticated } from './utils/auth';
 
 const App: React.FC = () => {
@@ -34,28 +36,36 @@ const App: React.FC = () => {
               },
             }}
           />
+          
+          {/* Access Timer */}
+          <AccessTimer />
+          
         <Routes>
-          {/* Home page is the default route */}
-          <Route path="/" element={<HomePage />} />
+          {/* Token verification page - accessible to everyone */}
+          <Route path="/verify-token" element={<TokenVerificationPage />} />
           
-          {/* Batches page - seamless integration */}
-          <Route path="/batches" element={<BatchesPage />} />
-          
-          {/* Live Classes page - seamless integration */}
-          <Route path="/liveclass" element={<LiveClassPage />} />
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>
+            {/* Home page is the default route */}
+            <Route path="/" element={<HomePage />} />
+            
+            {/* Batches page - seamless integration */}
+            <Route path="/batches" element={<BatchesPage />} />
+            
+            {/* Live Classes page - seamless integration */}
+            <Route path="/liveclass" element={<LiveClassPage />} />
 
-          {/* Video Player Demo Route */}
-          <Route path="/video-demo" element={<VideoPlayerDemo />} />
+            {/* Video Player Demo Route */}
+            <Route path="/video-demo" element={<VideoPlayerDemo />} />
 
-          {/* Admin Routes */}
-          <Route 
-            path="/surajadminedumasterlogin" 
-            element={
-              isAdminAuthenticated() ? <Navigate to="/surajadminedumasterlogin/dashboard" replace /> : <AdminLogin onLogin={forceUpdate} />
-            } 
-          />
-          <Route path="/surajadminedumasterlogin/dashboard" element={<ProtectedRoute />}>
-            <Route path="" element={<AdminDashboard onLogout={forceUpdate} />} />
+            {/* Admin Routes */}
+            <Route 
+              path="/surajadminedumasterlogin" 
+              element={
+                isAdminAuthenticated() ? <Navigate to="/surajadminedumasterlogin/dashboard" replace /> : <AdminLogin onLogin={forceUpdate} />
+              } 
+            />
+            <Route path="/surajadminedumasterlogin/dashboard" element={<AdminDashboard onLogout={forceUpdate} />} />
           </Route>
 
           {/* Embed Route for all batches */}

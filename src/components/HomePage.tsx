@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Video, BookOpen, Zap } from 'lucide-react';
+import { Users, Video, BookOpen, Zap, Shield } from 'lucide-react';
 import { firebaseService } from '../services/firebase';
 import { Batch, LiveClass } from '../types';
+import { isUserAuthenticated } from '../utils/auth';
 
 const HomePage: React.FC = () => {
   const [batches, setBatches] = useState<Batch[]>([]);
@@ -32,6 +33,9 @@ const HomePage: React.FC = () => {
     { label: 'Active Sessions', value: activeLiveSessions.length, icon: Zap, color: 'from-purple-600 to-purple-700' },
   ];
 
+  // Check if user is authenticated
+  const isAuthenticated = isUserAuthenticated();
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
@@ -54,74 +58,100 @@ const HomePage: React.FC = () => {
           <p className="text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
             Your comprehensive educational platform for live classes, course materials, and interactive learning experiences.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/batches"
-              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              Explore Batches
-            </Link>
-            <Link
-              to="/liveclass"
-              className="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white px-8 py-3 rounded-lg font-semibold border-2 border-blue-600 hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              Join Live Classes
-            </Link>
-          </div>
+          
+          {/* Show access message for unauthenticated users */}
+          {!isAuthenticated ? (
+            <div className="bg-yellow-500/20 border border-yellow-500 rounded-lg p-6 mb-8 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Shield className="w-6 h-6 text-yellow-500" />
+                <h3 className="text-xl font-bold text-yellow-500">Access Required</h3>
+              </div>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
+                You need to verify your access token to view content on this platform. 
+                Get your token from our Telegram bot and verify it to continue.
+              </p>
+              <Link
+                to="/verify-token"
+                className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-yellow-600 hover:to-yellow-700 transition-all duration-200 shadow-lg hover:shadow-xl inline-flex items-center gap-2"
+              >
+                <Shield className="w-5 h-5" />
+                Get Access Now
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/batches"
+                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                Explore Batches
+              </Link>
+              <Link
+                to="/liveclass"
+                className="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white px-8 py-3 rounded-lg font-semibold border-2 border-blue-600 hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                Join Live Classes
+              </Link>
+            </div>
+          )}
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <div key={index} className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-6 hover:shadow-2xl transition-all duration-200 border border-gray-300 dark:border-gray-700">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{stat.label}</p>
-                  </div>
-                  <div className={`bg-gradient-to-br ${stat.color} p-3 rounded-lg`}>
-                    <Icon className="h-6 w-6 text-white" />
+        {/* Stats Section - only show for authenticated users */}
+        {isAuthenticated && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {stats.map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <div key={index} className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-6 hover:shadow-2xl transition-all duration-200 border border-gray-300 dark:border-gray-700">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                      <p className="text-gray-600 dark:text-gray-400">{stat.label}</p>
+                    </div>
+                    <div className={`bg-gradient-to-br ${stat.color} p-3 rounded-lg`}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Quick Access */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <Link
-            to="/batches"
-            className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-8 hover:shadow-2xl transition-all duration-200 group border border-gray-300 dark:border-gray-700 hover:border-yellow-500"
-          >
-            <Users className="h-12 w-12 text-yellow-500 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Next Toppers Batches</h3>
-            <p className="text-gray-600 dark:text-gray-400">Elite coaching programs designed for future toppers and achievers.</p>
-          </Link>
+        {/* Quick Access - only show for authenticated users */}
+        {isAuthenticated && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Link
+              to="/batches"
+              className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-8 hover:shadow-2xl transition-all duration-200 group border border-gray-300 dark:border-gray-700 hover:border-yellow-500"
+            >
+              <Users className="h-12 w-12 text-yellow-500 mb-4 group-hover:scale-110 transition-transform" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Next Toppers Batches</h3>
+              <p className="text-gray-600 dark:text-gray-400">Elite coaching programs designed for future toppers and achievers.</p>
+            </Link>
 
-          <Link
-            to="/liveclass"
-            className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-8 hover:shadow-2xl transition-all duration-200 group border border-gray-300 dark:border-gray-700 hover:border-red-500"
-          >
-            <Video className="h-12 w-12 text-red-500 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Live Classes</h3>
-            <p className="text-gray-600 dark:text-gray-400">Join interactive live sessions and connect with instructors in real-time.</p>
-          </Link>
+            <Link
+              to="/liveclass"
+              className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-8 hover:shadow-2xl transition-all duration-200 group border border-gray-300 dark:border-gray-700 hover:border-red-500"
+            >
+              <Video className="h-12 w-12 text-red-500 mb-4 group-hover:scale-110 transition-transform" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Live Classes</h3>
+              <p className="text-gray-600 dark:text-gray-400">Join interactive live sessions and connect with instructors in real-time.</p>
+            </Link>
 
-          <Link
-            to="/batches"
-            className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-8 hover:shadow-2xl transition-all duration-200 group border border-gray-300 dark:border-gray-700 hover:border-green-500"
-          >
-            <BookOpen className="h-12 w-12 text-green-500 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Digital Library</h3>
-            <p className="text-gray-600 dark:text-gray-400">Access a vast collection of educational books and reading materials.</p>
-          </Link>
-        </div>
+            <Link
+              to="/batches"
+              className="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-xl p-8 hover:shadow-2xl transition-all duration-200 group border border-gray-300 dark:border-gray-700 hover:border-green-500"
+            >
+              <BookOpen className="h-12 w-12 text-green-500 mb-4 group-hover:scale-110 transition-transform" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Digital Library</h3>
+              <p className="text-gray-600 dark:text-gray-400">Access a vast collection of educational books and reading materials.</p>
+            </Link>
+          </div>
+        )}
 
-        {/* Live Now Section */}
-        {(liveLiveClasses.length > 0 || activeLiveSessions.length > 0) && (
+        {/* Live Now Section - only show for authenticated users */}
+        {isAuthenticated && (liveLiveClasses.length > 0 || activeLiveSessions.length > 0) && (
           <div className="mt-16">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">🔴 Live Now</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
