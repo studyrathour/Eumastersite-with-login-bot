@@ -56,16 +56,26 @@ export const clearUserToken = (): void => {
   localStorage.removeItem('userTokenData');
 };
 
+// Determine base URL based on environment
+const getApiBaseUrl = () => {
+  // In development, use the proxy
+  if (import.meta.env.DEV) {
+    return '/api';
+  }
+  // In production, use the direct API URL
+  return 'https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app';
+};
+
 export const verifyToken = async (token: string): Promise<TokenVerificationResponse> => {
   try {
     // Log the exact token being sent for debugging
     console.log('Sending token for verification:', token);
     
-    // Using proxy endpoint to avoid CORS issues
-    // Properly encode the token parameter
+    // Use appropriate base URL based on environment
+    const baseUrl = getApiBaseUrl();
     const encodedToken = encodeURIComponent(token);
-    const url = `/api/verify-token?token=${encodedToken}`;
-    console.log('Making request to proxy:', url);
+    const url = `${baseUrl}/verify-token?token=${encodedToken}`;
+    console.log('Making request to:', url);
     
     const response = await fetch(url, {
       method: 'GET',
@@ -118,10 +128,10 @@ export const verifyToken = async (token: string): Promise<TokenVerificationRespo
 
 export const checkAccess = async (userId: number): Promise<AccessCheckResponse> => {
   try {
-    // Using proxy endpoint to avoid CORS issues
-    // Properly encode the userId parameter
-    const url = `/api/check-access?userId=${encodeURIComponent(userId.toString())}`;
-    console.log('Making request to proxy:', url);
+    // Use appropriate base URL based on environment
+    const baseUrl = getApiBaseUrl();
+    const url = `${baseUrl}/check-access?userId=${encodeURIComponent(userId.toString())}`;
+    console.log('Making request to:', url);
     
     const response = await fetch(url, {
       method: 'GET',

@@ -11,6 +11,19 @@
   # It forces Netlify to use Node.js version 20.
   NODE_VERSION = "20"
 
+# Proxy API requests to the Telegram bot
+[[redirects]]
+  from = "/api/verify-token"
+  to = "https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app/verify-token"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/check-access"
+  to = "https://competitive-karly-edumastersuraj-75acc2f2.koyeb.app/check-access"
+  status = 200
+  force = true
+
 # This rule is essential for Single Page Applications (SPAs) like yours.
 # It ensures that all paths are handled by your index.html file,
 # fixing "404 Not Found" errors on direct navigation to routes like /admin.
