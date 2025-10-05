@@ -1,5 +1,4 @@
-const fetch = require('node-fetch');
-
+// Use the built-in fetch instead of node-fetch for Netlify functions
 exports.handler = async (event, context) => {
   try {
     // Get the userId from query parameters

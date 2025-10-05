@@ -1,5 +1,4 @@
-const fetch = require('node-fetch');
-
+// Use the built-in fetch instead of node-fetch for Netlify functions
 exports.handler = async (event, context) => {
   try {
     // Get the token from query parameters
@@ -8,6 +7,12 @@ exports.handler = async (event, context) => {
     if (!token) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Allow-Methods': 'GET, OPTIONS'
+        },
         body: JSON.stringify({ 
           valid: false, 
           message: 'Token parameter is required' 
