@@ -1,0 +1,27 @@
+# Koyeb ignore file
+node_modules/
+.git/
+.gitignore
+README.md
+.env
+.env.local
+.env.development
+.env.production
+.nyc_output/
+coverage/
+.nyc_output/
+.coverage/
+.vscode/
+.idea/
+*.log
+*.lock
+yarn-error.log
+dist/
+src/
+*.md
+netlify/
+.netlify/
+firebase-rules.md
+TOKEN_AUTH_SYSTEM.md
+koyeb.yaml
+.koyebignore
