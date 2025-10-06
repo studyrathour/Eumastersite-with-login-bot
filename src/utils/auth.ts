@@ -1,4 +1,4 @@
-klkexport const ADMIN_CREDENTIALS = {
+export const ADMIN_CREDENTIALS = {
   username: 'ravi',
   password: '2008'
 };
