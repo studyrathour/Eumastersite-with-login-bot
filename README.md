@@ -206,7 +206,12 @@ npm run preview
    npm run deploy:koyeb
    ```
 
-4. **Manual Deployment**
+4. **Docker Deployment**
+   - The project includes a Dockerfile for containerized deployment
+   - See [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md) for detailed instructions
+   - Select "Docker" as the deployment method in Koyeb dashboard
+
+5. **Manual Deployment**
    - Build the project: `npm run build`
    - Upload the contents of the `dist` folder to Koyeb as a static site
 

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy EduMaster to Netlify</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #00ad9f;
+            border-bottom: 2px solid #00ad9f;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+        .step {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #00ad9f;
+            margin: 15px 0;
+        }
+        .file-info {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .btn {
+            background-color: #00ad9f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .btn:hover {
+            background-color: #008c80;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .note {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Deploy EduMaster to Netlify</h1>
+        
+        <p>This guide will help you deploy your EduMaster educational platform to Netlify.</p>
+        
+        <div class="file-info">
+            <h3>Deployment Package Information</h3>
+            <p><strong>File:</strong> edumaster-deploy.zip</p>
+            <p><strong>Location:</strong> Same directory as this file</p>
+            <p><strong>Contents:</strong> All built files for your EduMaster application</p>
+        </div>
+        
+        <h2>Method 1: Drag and Drop Deployment (Easiest)</h2>
+        
+        <div class="step">
+            <h3>Step 1: Create a Netlify Account</h3>
+            <p>Visit <a href="https://app.netlify.com/signup" target="_blank">Netlify Signup</a> to create a free account.</p>
+        </div>
+        
+        <div class="step">
+            <h3>Step 2: Deploy Your Site</h3>
+            <ol>
+                <li>Go to <a href="https://app.netlify.com/" target="_blank">Netlify Dashboard</a></li>
+                <li>Sign in to your account</li>
+                <li>Drag and drop the <code>edumaster-deploy.zip</code> file onto the deployment area</li>
+                <li>Netlify will automatically deploy your site</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <h3>Step 3: Configure Your Site</h3>
+            <ol>
+                <li>After deployment, click on your new site in the Netlify dashboard</li>
+                <li>Your site URL will be displayed (e.g., https://your-site-name.netlify.app)</li>
+                <li>You can customize the site name in "Site settings" > "Change site name"</li>
+            </ol>
+        </div>
+        
+        <h2>Method 2: GitHub Integration (Recommended for automatic deployments)</h2>
+        
+        <div class="step">
+            <h3>Step 1: Push Your Code to GitHub</h3>
+            <p>If you haven't already, push your code to a GitHub repository:</p>
+            <pre><code>git add .
+git commit -m "Prepare for Netlify deployment"
+git remote add origin https://github.com/yourusername/your-repo-name.git
+git push -u origin main</code></pre>
+        </div>
+        
+        <div class="step">
+            <h3>Step 2: Connect to Netlify</h3>
+            <ol>
+                <li>Go to <a href="https://app.netlify.com/" target="_blank">Netlify Dashboard</a></li>
+                <li>Click "New site from Git"</li>
+                <li>Select "GitHub" and authorize Netlify</li>
+                <li>Select your EduMaster repository</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <h3>Step 3: Configure Build Settings</h3>
+            <p>Netlify should automatically detect your settings from <code>netlify.toml</code>:</p>
+            <ul>
+                <li><strong>Build command:</strong> <code>npm install && npm run build</code></li>
+                <li><strong>Publish directory:</strong> <code>dist</code></li>
+            </ul>
+            <p>Click "Deploy site"</p>
+        </div>
+        
+        <h2>Configuration Details</h2>
+        
+        <div class="step">
+            <h3>SPA Routing</h3>
+            <p>Your application is configured as a Single Page Application with proper routing:</p>
+            <ul>
+                <li>All routes redirect to <code>index.html</code></li>
+                <li>Client-side navigation works correctly</li>
+                <li>Token authentication system is preserved</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h3>CORS Configuration</h3>
+            <p>CORS headers are set for API calls to your Telegram bot:</p>
+            <ul>
+                <li><code>Access-Control-Allow-Origin: *</code></li>
+                <li>Token verification and access checking will work correctly</li>
+            </ul>
+        </div>
+        
+        <div class="note">
+            <h3>Important Notes</h3>
+            <ul>
+                <li>Your application includes token-based authentication</li>
+                <li>Admin panel is accessible with username: <code>ravi</code> and password: <code>2008</code></li>
+                <li>All content is protected and requires valid tokens for access</li>
+                <li>The site is fully responsive and works on mobile devices</li>
+            </ul>
+        </div>
+        
+        <h2>Troubleshooting</h2>
+        
+        <div class="step">
+            <h3>Common Issues</h3>
+            <ul>
+                <li><strong>Routing problems:</strong> Ensure redirect rules are applied</li>
+                <li><strong>Asset loading:</strong> Check that <code>base: './'</code> is in vite.config.ts</li>
+                <li><strong>Build failures:</strong> Verify Node.js version 20 in netlify.toml</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h3>Support Resources</h3>
+            <ul>
+                <li><a href="https://docs.netlify.com/" target="_blank">Netlify Documentation</a></li>
+                <li><a href="https://community.netlify.com/" target="_blank">Netlify Community</a></li>
+                <li>Check deployment logs in Netlify dashboard for errors</li>
+            </ul>
+        </div>
+        
+        <p><strong>Your EduMaster platform is now ready for deployment to Netlify!</strong></p>
+    </div>
+</body>
+</html>

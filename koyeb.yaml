@@ -1,11 +1,11 @@
-# Koyeb configuration file for static site deployment
+# Koyeb configuration file for Docker deployment
 name: edumaster
-service_type: static
+service_type: docker
 routes:
   - path: "/"
-    dest: "/index.html"
+    dest: "/"
   - path: "/*"
-    dest: "/index.html"
+    dest: "/"
 ports:
   - port: 80
     protocol: http
