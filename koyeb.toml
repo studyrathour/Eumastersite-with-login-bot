@@ -14,6 +14,11 @@
 # It ensures that all paths are handled by your index.html file,
 # fixing "404 Not Found" errors on direct navigation to routes.
 [[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
