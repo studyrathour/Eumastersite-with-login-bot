@@ -25,6 +25,16 @@ export default defineConfig({
   },
   define: {
     global: 'globalThis',
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+        entryFileNames: `[name].js`,
+        chunkFileNames: `[name].js`,
+        assetFileNames: `[name].[ext]`
+      }
+    }
   }
   // Removed proxy configuration since we're using direct API calls
 });

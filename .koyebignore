@@ -16,12 +16,10 @@ coverage/
 *.log
 *.lock
 yarn-error.log
-dist/
 src/
 *.md
 netlify/
 .netlify/
 firebase-rules.md
 TOKEN_AUTH_SYSTEM.md
-koyeb.yaml
 .koyebignore

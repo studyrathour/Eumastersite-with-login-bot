@@ -2,9 +2,9 @@
 name: edumaster
 service_type: static
 routes:
-  - path: "/*"
-    dest: "/"
   - path: "/"
+    dest: "/index.html"
+  - path: "/*"
     dest: "/index.html"
 ports:
   - port: 80
