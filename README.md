@@ -174,6 +174,41 @@ npm run preview
 - **Netlify**: Ready with `netlify.toml` configuration
 - **Vercel**: Compatible with Vite builds
 - **Firebase Hosting**: Direct Firebase integration
+- **Koyeb**: Ready with `koyeb.yaml` configuration
+
+### Deploying to Koyeb
+
+1. **Prerequisites**
+   - Create a [Koyeb](https://www.koyeb.com/) account
+   - Install Git
+   - Build the project locally: `npm run build`
+
+2. **Deploy using Koyeb Dashboard**
+   - Go to your Koyeb dashboard
+   - Click "Create App"
+   - Select "Static Site"
+   - Connect your GitHub repository or upload the `dist` folder
+   - Configure the app with these settings:
+     - Build command: `npm run build`
+     - Publish directory: `dist`
+     - Environment variables (if needed)
+   - Deploy the app
+
+3. **Deploy using Koyeb CLI** (if installed)
+   ```bash
+   # Install Koyeb CLI (if not already installed)
+   # Follow instructions at https://www.koyeb.com/docs/cli/installation
+   
+   # Login to Koyeb
+   koyeb login
+   
+   # Deploy the app
+   npm run deploy:koyeb
+   ```
+
+4. **Manual Deployment**
+   - Build the project: `npm run build`
+   - Upload the contents of the `dist` folder to Koyeb as a static site
 
 ## 🤝 Contributing
 
