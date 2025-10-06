@@ -1,4 +1,24 @@
-# Fixing Persistent Koyeb Deployment Issues
+Ports
+Configure ports
+Ctrl + 8
+8000
+HTTP
+Public HTTPS access
+
+Port
+8000
+Protocol
+HTTP
+
+Public HTTPS access
+Expose the HTTP port to the Internet on a specific path
+Path
+/
+Will be publicly accessible at: https://[subdomain].koyeb.app/
+
+Proxy TCP access
+Expose the TCP port through proxy
+Koyeb will create a proxy domain and port (domain:port) to forward traffic to your service's TCP port# Fixing Persistent Koyeb Deployment Issues
 
 This guide addresses persistent "Cannot GET" errors and other deployment issues when deploying EduMaster to Koyeb.
 
