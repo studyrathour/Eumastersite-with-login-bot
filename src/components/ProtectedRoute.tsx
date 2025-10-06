@@ -8,7 +8,7 @@ const ProtectedRoute: React.FC = () => {
   // Check if user is admin
   const isAdmin = isAdminAuthenticated();
   
-  // Check if user has valid token
+  // Check if user has access
   const isUser = isUserAuthenticated();
   
   // Allow access to token verification page for unauthenticated users
@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC = () => {
     return <Outlet />;
   }
   
-  // If user has valid token, allow access to content
+  // If user has access, allow access to content
   if (isUser) {
     return <Outlet />;
   }

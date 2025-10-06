@@ -12,6 +12,7 @@ import EmbedWidget from './components/EmbedWidget';
 import VideoPlayerDemo from './components/VideoPlayerDemo';
 import ProtectedRoute from './components/ProtectedRoute';
 import TokenVerificationPage from './components/TokenVerificationPage';
+import TelegramBotPage from './components/TelegramBotPage';
 import AccessTimer from './components/AccessTimer';
 import { isAdminAuthenticated } from './utils/auth';
 
@@ -43,6 +44,9 @@ const App: React.FC = () => {
         <Routes>
           {/* Token verification page - accessible to everyone */}
           <Route path="/verify-token" element={<TokenVerificationPage />} />
+          
+          {/* Telegram bot page - accessible to everyone */}
+          <Route path="/telegram-bot" element={<TelegramBotPage />} />
           
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>

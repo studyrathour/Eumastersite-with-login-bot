@@ -19,6 +19,26 @@ export const adminLogout = (): void => {
   localStorage.removeItem('adminAuth');
 };
 
+// Simple user authentication without external token verification
+export const isUserAuthenticated = (): boolean => {
+  // Check for either simple access or Telegram-based access
+  return localStorage.getItem('userAccess') === 'true' || 
+         localStorage.getItem('telegramUserAccess') === 'true';
+};
+
+export const grantUserAccess = (): void => {
+  localStorage.setItem('userAccess', 'true');
+};
+
+export const grantTelegramUserAccess = (): void => {
+  localStorage.setItem('telegramUserAccess', 'true');
+};
+
+export const removeUserAccess = (): void => {
+  localStorage.removeItem('userAccess');
+  localStorage.removeItem('telegramUserAccess');
+};
+
 // Token authentication functions
 export const TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
@@ -33,18 +53,6 @@ export interface AccessCheckResponse {
   message: string;
   expiresAt?: number | null;
 }
-
-export const isUserAuthenticated = (): boolean => {
-  const tokenData = localStorage.getItem('userTokenData');
-  if (!tokenData) return false;
-  
-  try {
-    const { expiration } = JSON.parse(tokenData);
-    return Date.now() < expiration;
-  } catch (e) {
-    return false;
-  }
-};
 
 export const setUserToken = (userId: number, expiresAt?: number): void => {
   // Use the provided expiration time or default to 24 hours

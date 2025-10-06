@@ -67,8 +67,8 @@ const HomePage: React.FC = () => {
                 <h3 className="text-xl font-bold text-yellow-500">Access Required</h3>
               </div>
               <p className="text-gray-700 dark:text-gray-300 mb-4">
-                You need to verify your access token to view content on this platform. 
-                Get your token from our Telegram bot and verify it to continue.
+                You need to verify your access to view content on this platform. 
+                Click the button below to get access.
               </p>
               <Link
                 to="/verify-token"

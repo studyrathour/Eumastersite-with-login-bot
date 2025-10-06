@@ -1,6 +1,6 @@
 # EduMaster - Educational Platform
 
-A comprehensive educational platform built with React, TypeScript, and Firebase for managing courses, live classes, and interactive learning experiences.
+A comprehensive educational platform built with React, TypeScript, and Firebase for managing courses, live classes, and interactive learning experiences. Now includes an integrated Telegram bot for user authentication.
 
 ## 🚀 Features
 
@@ -12,6 +12,7 @@ A comprehensive educational platform built with React, TypeScript, and Firebase 
 - **Live Classes** - Real-time live class integration
 - **Video Player** - Full-screen video player with external player support
 - **Content Security** - Protected content with encoding/decoding mechanisms
+- **Telegram Authentication** - User authentication through Telegram bot with channel verification
 
 ### 📚 Content Management
 - **Batch System** - Multiple layout options (Standard Grid, Horizontal List, Overlay Grid, Alternating List)
@@ -30,19 +31,21 @@ A comprehensive educational platform built with React, TypeScript, and Firebase 
 - **Admin Dashboard** - Comprehensive admin panel
 - **Student Interface** - Clean, intuitive student experience
 - **Protected Routes** - Secure admin access
-- **Authentication** - Firebase-based user authentication
+- **Authentication** - Firebase-based user authentication with Telegram integration
+- **Channel Verification** - Mandatory Telegram channel membership verification
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18 + TypeScript
 - **Styling**: Tailwind CSS
-- **Backend**: Firebase (Firestore + Realtime Database)
+- **Backend**: Firebase (Firestore + Realtime Database) + Python Telegram Bot
 - **Build Tool**: Vite
 - **Video Player**: Custom HLS-enabled player
 - **Icons**: Lucide React
 - **Animation**: Framer Motion
 - **Routing**: React Router DOM
 - **State Management**: React Hooks
+- **Process Management**: Supervisord (for Docker deployment)
 
 ## 📁 Project Structure
 
@@ -61,6 +64,11 @@ edumaster40-main/
 │   ├── types/              # TypeScript type definitions
 │   ├── utils/              # Utility functions and assets
 │   └── App.tsx
+├── telegram_bot/           # Python Telegram bot
+│   ├── bot.py             # Telegram bot logic
+│   ├── api.py             # Flask API server
+│   ├── requirements.txt   # Python dependencies
+│   └── README.md          # Bot documentation
 ├── public/                 # Static assets
 ├── exports/               # Sample course exports
 └── ...
@@ -70,8 +78,10 @@ edumaster40-main/
 
 ### Prerequisites
 - Node.js (v16 or higher)
+- Python 3.7 or higher
 - npm or yarn
 - Firebase project setup
+- Telegram Bot Token (obtain from @BotFather)
 
 ### Installation
 
@@ -81,23 +91,39 @@ edumaster40-main/
    cd edumaster40-main
    ```
 
-2. **Install dependencies**
+2. **Install frontend dependencies**
    ```bash
    npm install
    ```
 
-3. **Firebase Setup**
+3. **Install backend dependencies**
+   ```bash
+   cd telegram_bot
+   pip install -r requirements.txt
+   cd ..
+   ```
+
+4. **Firebase Setup**
    - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
    - Enable Firestore Database
    - Enable Authentication
    - Copy your Firebase config to `src/firebase/config.ts`
 
-4. **Start development server**
+5. **Telegram Bot Setup**
+   - Create a bot with @BotFather on Telegram
+   - Obtain your bot token
+   - Set the `BOT_TOKEN` environment variable
+
+6. **Start development servers**
    ```bash
+   # Terminal 1: Start the frontend
    npm run dev
+   
+   # Terminal 2: Start the bot API
+   npm run bot:dev
    ```
 
-5. **Open your browser**
+7. **Open your browser**
    Navigate to `http://localhost:5173`
 
 ## 🔧 Configuration
@@ -114,6 +140,19 @@ const firebaseConfig = {
   messagingSenderId: "your-sender-id",
   appId: "your-app-id"
 };
+```
+
+### Telegram Bot Configuration
+Update the mandatory channels in `telegram_bot/bot.py`:
+
+```python
+MANDATORY_CHANNELS = [
+    '@Team_Masters_TM',
+    'https://t.me/+uMpwtK3Bu8w0MzU1',
+    'https://t.me/+rs2CiB7YDbJlM2M1',
+    '@EduMaster2008',
+    '@masters_chat_official'
+]
 ```
 
 ## 📱 Features in Detail
@@ -138,6 +177,13 @@ const firebaseConfig = {
 - **Dynamic Obfuscation**: DOM attributes protection
 - **Secure Storage**: Encoded data in Firebase
 - **Anti-Scraping**: Multiple protection layers
+- **Telegram Authentication**: Secure user verification through Telegram
+
+### Telegram Authentication
+- **Channel Verification**: Users must join mandatory Telegram channels
+- **Session Management**: Unique session IDs with expiration
+- **Activity Logging**: User interaction tracking
+- **Login Logging**: Successful authentication records
 
 ## 🎨 Design System
 
@@ -175,50 +221,76 @@ npm run preview
 - **Vercel**: Compatible with Vite builds
 - **Firebase Hosting**: Direct Firebase integration
 - **Koyeb**: Ready with `koyeb.yaml` configuration
+- **Docker**: Integrated deployment with both frontend and Telegram bot
 
-### Deploying to Koyeb
+### Deploying to Koyeb with Integrated Bot
 
 1. **Prerequisites**
    - Create a [Koyeb](https://www.koyeb.com/) account
    - Install Git
+   - Obtain a Telegram Bot Token from @BotFather
    - Build the project locally: `npm run build`
 
 2. **Deploy using Koyeb Dashboard**
    - Go to your Koyeb dashboard
    - Click "Create App"
-   - Select "Static Site"
-   - Connect your GitHub repository or upload the `dist` folder
+   - Select "Docker Image" or connect your GitHub repository
    - Configure the app with these settings:
-     - Build command: `npm run build`
-     - Publish directory: `dist`
-     - Environment variables (if needed)
+     - Build method: Dockerfile
+     - Environment variables:
+       - `BOT_TOKEN`: Your Telegram bot token
    - Deploy the app
 
-3. **Deploy using Koyeb CLI** (if installed)
+3. **Deploy using Docker**
+   ```bash
+   # Build the Docker image
+   docker build -t edumaster-with-bot .
+   
+   # Run the container
+   docker run -d \
+     --name edumaster \
+     -p 80:80 \
+     -p 8000:8000 \
+     -e BOT_TOKEN="your_telegram_bot_token" \
+     edumaster-with-bot
+   ```
+
+4. **Deploy using Koyeb CLI** (if installed)
    ```bash
    # Install Koyeb CLI (if not already installed)
    # Follow instructions at https://www.koyeb.com/docs/cli/installation
    
-   # Login to Koyeb
-   koyeb login
-   
    # Deploy the app
-   npm run deploy:koyeb
+   koyeb service create edumaster \
+     --app your-app-name \
+     --dockerfile Dockerfile \
+     --env BOT_TOKEN=your_telegram_bot_token \
+     --port 80:http \
+     --port 8000:http
    ```
 
-4. **Docker Deployment**
-   - The project includes a Dockerfile for containerized deployment
-   - See [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md) for detailed instructions
-   - Select "Docker" as the deployment method in Koyeb dashboard
+### API Endpoints
 
-5. **Manual Deployment**
-   - Build the project: `npm run build`
-   - Upload the contents of the `dist` folder to Koyeb as a static site
+The Telegram bot API is accessible at `/api/` relative to your domain:
+
+- `POST /api/generate_login_url` - Generate a login URL for Telegram
+- `GET /api/check_login_status` - Check the status of a login session
+- `GET /api/health` - Health check endpoint
+- `GET /api/logs/activity` - Get activity logs
+- `GET /api/logs/login` - Get login logs
+
+## 📚 Documentation
+
+- [TOKEN_AUTH_SYSTEM.md](TOKEN_AUTH_SYSTEM.md) - Authentication system documentation
+- [TELEGRAM_BOT_IMPLEMENTATION.md](TELEGRAM_BOT_IMPLEMENTATION.md) - Telegram bot implementation details
+- [INTEGRATED_DEPLOYMENT.md](INTEGRATED_DEPLOYMENT.md) - Deployment with integrated bot
+- [TELEGRAM_BOT_SETUP.md](TELEGRAM_BOT_SETUP.md) - Setup guide for the Telegram bot
+- [telegram_bot/README.md](telegram_bot/README.md) - Telegram bot specific documentation
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
@@ -227,22 +299,7 @@ npm run preview
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Authors
-
-- **Suraj Rathour** - *Initial work* - [studyrathour](https://github.com/studyrathour)
-
 ## 🙏 Acknowledgments
 
-- Firebase for backend services
-- Tailwind CSS for styling system
-- Lucide React for icons
-- Vite for build tooling
-- React Router for navigation
-
-## 📞 Support
-
-For support, email rathourravishankar186@gmail.com or create an issue in this repository.
-
----
-
-**Built with ❤️ for education**
+- Thanks to all contributors who have helped shape EduMaster
+- Inspired by modern educational platforms and Telegram bot capabilities

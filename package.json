@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "deploy:koyeb": "koyeb static deploy edumaster --app edumaster --region was",
     "deploy:prepare": "node deploy.mjs",
-    "build:koyeb": "vite build"
+    "build:koyeb": "vite build",
+    "bot:dev": "cd telegram_bot && python api.py"
   },
   "dependencies": {
     "firebase": "^12.2.1",

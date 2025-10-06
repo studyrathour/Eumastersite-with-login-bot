@@ -15,7 +15,7 @@ const LiveClassPage: React.FC = () => {
           </div>
           <h2 className="text-2xl font-bold text-text-primary mb-4">Access Required</h2>
           <p className="text-text-secondary mb-6">
-            You need to verify your access token to join live classes.
+            You need to verify your access to join live classes.
           </p>
           <Link
             to="/verify-token"

@@ -16,7 +16,7 @@ const BatchesPage: React.FC = () => {
           </div>
           <h2 className="text-2xl font-bold text-text-primary mb-4">Access Required</h2>
           <p className="text-text-secondary mb-6">
-            You need to verify your access token to view batches and course content.
+            You need to verify your access to view batches and course content.
           </p>
           <Link
             to="/verify-token"

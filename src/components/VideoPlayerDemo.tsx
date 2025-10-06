@@ -19,7 +19,7 @@ const VideoPlayerDemo: React.FC = () => {
           </div>
           <h2 className="text-2xl font-bold text-text-primary mb-4">Access Required</h2>
           <p className="text-text-secondary mb-6">
-            You need to verify your access token to use the video player demo.
+            You need to verify your access to use the video player demo.
           </p>
           <Link
             to="/verify-token"
