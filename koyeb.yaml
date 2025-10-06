@@ -1,12 +1,9 @@
 # Koyeb configuration file for static site deployment
 name: edumaster
-type: static
-env:
-  - key: NODE_ENV
-    value: production
+service_type: static
 routes:
-  - path: /*
-    app: edumaster
+  - path: "/*"
+    dest: "/"
 ports:
   - port: 80
     protocol: http
