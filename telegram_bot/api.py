@@ -5,6 +5,7 @@ import sys
 import threading
 from datetime import datetime
 import time
+import logging
 
 # Add the telegram_bot directory to the path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -19,6 +20,10 @@ from bot import (
     login_logs
 )
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
 CORS(app)
 
@@ -29,6 +34,7 @@ def generate_login_url_endpoint():
         result = generate_login_url()
         return jsonify(result), 200
     except Exception as e:
+        logger.error(f'Failed to generate login URL: {str(e)}')
         return jsonify({
             'status': 'error',
             'message': f'Failed to generate login URL: {str(e)}'
@@ -49,6 +55,7 @@ def check_login_status_endpoint():
         result = check_login_status(session_id)
         return jsonify(result), 200
     except Exception as e:
+        logger.error(f'Failed to check login status: {str(e)}')
         return jsonify({
             'status': 'error',
             'message': f'Failed to check login status: {str(e)}'
@@ -61,6 +68,7 @@ def health_endpoint():
         result = health_check()
         return jsonify(result), 200
     except Exception as e:
+        logger.error(f'Health check failed: {str(e)}')
         return jsonify({
             'status': 'error',
             'message': f'Health check failed: {str(e)}'
@@ -82,6 +90,7 @@ def activity_logs_endpoint():
             'count': len(paginated_logs)
         }), 200
     except Exception as e:
+        logger.error(f'Failed to retrieve activity logs: {str(e)}')
         return jsonify({
             'status': 'error',
             'message': f'Failed to retrieve activity logs: {str(e)}'
@@ -103,6 +112,7 @@ def login_logs_endpoint():
             'count': len(paginated_logs)
         }), 200
     except Exception as e:
+        logger.error(f'Failed to retrieve login logs: {str(e)}')
         return jsonify({
             'status': 'error',
             'message': f'Failed to retrieve login logs: {str(e)}'
@@ -118,4 +128,10 @@ def home():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
+    bot_token = os.environ.get('BOT_TOKEN', '')
+    
+    if not bot_token:
+        logger.warning("BOT_TOKEN environment variable not set")
+    
+    logger.info(f"Starting Telegram Bot API on port {port}")
     app.run(host='0.0.0.0', port=port, debug=False)
