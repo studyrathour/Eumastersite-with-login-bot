@@ -7,8 +7,14 @@ from typing import Dict, Any
 import threading
 import time
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
+# Import telegram libraries with error handling
+try:
+    from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+    from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
+    TELEGRAM_AVAILABLE = True
+except ImportError:
+    TELEGRAM_AVAILABLE = False
+    print("Telegram libraries not available, running in API-only mode")
 
 # Configure logging
 logging.basicConfig(
@@ -283,40 +289,49 @@ def check_login_status(session_id: str):
 
 def main():
     """Start the bot"""
+    # Check if telegram libraries are available
+    if not TELEGRAM_AVAILABLE:
+        logger.error("Telegram libraries not available. Please install python-telegram-bot")
+        return
+    
     # Get bot token from environment variable
     token = os.environ.get('BOT_TOKEN')
     if not token:
         logger.error("BOT_TOKEN environment variable not set")
         return
     
-    # Create the Updater and pass it your bot's token
-    updater = Updater(token)
-    
-    # Get the dispatcher to register handlers
-    dispatcher = updater.dispatcher
-    
-    # Register handlers
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CallbackQueryHandler(verify_membership))
-    
-    # Start the Bot
-    updater.start_polling()
-    
-    # Start session cleanup thread
-    def cleanup_thread():
-        while True:
-            time.sleep(300)  # Run every 5 minutes
-            cleaned = cleanup_expired_sessions()
-            if cleaned > 0:
-                logger.info(f"Cleaned up {cleaned} expired sessions")
-    
-    cleanup_daemon = threading.Thread(target=cleanup_thread, daemon=True)
-    cleanup_daemon.start()
-    
-    logger.info("Bot started successfully")
-    
-    # Run the bot until you press Ctrl-C
-    updater.idle()
+    try:
+        # Create the Updater and pass it your bot's token
+        updater = Updater(token)
+        
+        # Get the dispatcher to register handlers
+        dispatcher = updater.dispatcher
+        
+        # Register handlers
+        dispatcher.add_handler(CommandHandler("start", start))
+        dispatcher.add_handler(CallbackQueryHandler(verify_membership))
+        
+        # Start the Bot
+        updater.start_polling()
+        
+        # Start session cleanup thread
+        def cleanup_thread():
+            while True:
+                time.sleep(300)  # Run every 5 minutes
+                cleaned = cleanup_expired_sessions()
+                if cleaned > 0:
+                    logger.info(f"Cleaned up {cleaned} expired sessions")
+        
+        cleanup_daemon = threading.Thread(target=cleanup_thread, daemon=True)
+        cleanup_daemon.start()
+        
+        logger.info("Bot started successfully")
+        
+        # Run the bot until you press Ctrl-C
+        updater.idle()
+    except Exception as e:
+        logger.error(f"Failed to start bot: {e}")
+        return
 
 if __name__ == '__main__':
     main()
