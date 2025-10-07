@@ -6,15 +6,17 @@ from datetime import datetime, timedelta
 from typing import Dict, Any
 import threading
 import time
+import sys
 
 # Import telegram libraries with error handling
 try:
     from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
     from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
     TELEGRAM_AVAILABLE = True
-except ImportError:
+except ImportError as e:
     TELEGRAM_AVAILABLE = False
-    print("Telegram libraries not available, running in API-only mode")
+    print(f"Telegram libraries not available: {e}")
+    sys.exit(1)
 
 # Configure logging
 logging.basicConfig(
@@ -298,9 +300,13 @@ def main():
     token = os.environ.get('BOT_TOKEN')
     if not token:
         logger.error("BOT_TOKEN environment variable not set")
+        print("BOT_TOKEN environment variable not set")
         return
     
     try:
+        logger.info("Starting Telegram bot with token: " + token[:5] + "..." if len(token) > 5 else "Token too short")
+        print("Starting Telegram bot with token: " + token[:5] + "..." if len(token) > 5 else "Token too short")
+        
         # Create the Updater and pass it your bot's token
         updater = Updater(token)
         
@@ -312,6 +318,8 @@ def main():
         dispatcher.add_handler(CallbackQueryHandler(verify_membership))
         
         # Start the Bot
+        logger.info("Starting polling...")
+        print("Starting polling...")
         updater.start_polling()
         
         # Start session cleanup thread
@@ -326,12 +334,17 @@ def main():
         cleanup_daemon.start()
         
         logger.info("Bot started successfully")
+        print("Bot started successfully")
         
         # Run the bot until you press Ctrl-C
         updater.idle()
     except Exception as e:
         logger.error(f"Failed to start bot: {e}")
+        print(f"Failed to start bot: {e}")
+        import traceback
+        traceback.print_exc()
         return
 
 if __name__ == '__main__':
+    print("Starting Telegram bot...")
     main()

@@ -55,6 +55,12 @@ COPY --from=bot-builder /bot /app/bot
 # Copy supervisor configuration
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Copy verification scripts
+COPY verify_bot_files.py /app/
+
+# Make sure bot files are executable
+RUN chmod +x /app/bot/*.py
+
 # Expose ports
 EXPOSE 80 8000
 
